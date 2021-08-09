@@ -1,0 +1,5 @@
+---
+# handlers file for roles/reverse-proxy
+
+- name: Restarting Reverse-Proxy
+  shell: nginx -s reload

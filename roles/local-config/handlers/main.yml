@@ -1,0 +1,7 @@
+---
+# handlers file for roles/local-confdig
+
+- name: Restart Netplan
+  command: sudo netplan apply
+  async: 45
+  poll: 0

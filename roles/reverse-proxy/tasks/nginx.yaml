@@ -1,0 +1,42 @@
+# - name: Starting Nginx service
+#   service:
+#     name: nginx
+#     state: started
+#   tags: start service
+
+- name: Copying configuration
+  template:
+    src: '../templates/project.j2'
+    dest: '/etc/nginx/conf.d/{{ item.ServerName }}.{{ item.fulldomainname }}.conf'
+  loop: "{{ server.info }}"
+  tags: copy
+
+- name: Generate Basic Authen
+  htpasswd:
+    path: /etc/nginx/authen/.htpasswd-{{ item.ServerName }}
+    name: "{{ item.ServerName }}.{{ item.fulldomainname }}"
+    password: "{{ item.password }}"
+    owner: root
+    group: www-data
+    mode: 0640
+  loop: "{{ server.info }}"
+  tags: authen
+  notify:
+    - Restarting Reverse-Proxy
+
+# - name: Debug
+#   debug:
+#     msg: "{{ item.ServerName }}.{{ item.fulldomainname }}/{{ random_password }}"
+#   loop: "{{ server.info }}"
+#   tags: debug
+# - name: Edit Configuration
+#   lineinfile:
+#     path: /etc/nginx/nginx.conf
+#     backrefs: yes
+#     regexp: '^(\s*)[#]?include /etc/nginx/conf.d/;*'
+#     line: '\1include /etc/nginx/conf.d/{{ fulldomain }}/*.conf;'
+#     state: "present"
+#   changed_when: true
+#   notify: 
+#    - Restarting Reverse-Proxy
+#   tags: editing config
