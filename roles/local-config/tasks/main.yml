@@ -1,0 +1,59 @@
+---
+# tasks file for roles/local-confdig
+
+- name: Changing Hostname
+  hostname: 
+    name: "{{ item.hostname }}"
+  loop: "{{ info.config }}"
+
+# Debian
+- block:
+  - name: Changing IP Address
+    lineinfile:
+      path: /etc/netplan/00-installer-config.yaml
+      backrefs: yes
+      regexp: '^(\s*)[#]?- {{ ansible_host }}(: )*' 
+      line: '\1- {{ item.IpAdresss }}'
+      state: "present"
+    loop: "{{ info.config }}"
+    notify: Restart Netplan
+
+  - name: Deleting extra ssh config line
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: "PasswordAuthentication yes"
+      state: "absent"
+
+  - name: Changing ssh config
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: "#PasswordAuthentication yes"
+      line: "PasswordAuthentication no"
+      state: "present"
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+# CentOS
+- block:
+  - name: Changing IP Address
+    replace:
+      path: /etc/sysconfig/network-scripts/ifcfg-eth0
+      regexp: "{{ ansible_host }}" 
+      replace: "{{ item.IpAdresss }}"
+      #state: "present"
+    loop: "{{ info.config }}"
+
+
+  - name: Deleting extra ssh config line
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: "PasswordAuthentication yes"
+      state: "absent"
+
+  - name: Changing ssh config
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '#PasswordAuthentication yes'
+      line: "PasswordAuthentication no"
+      state: "present"  
+  when: ansible_facts['distribution'] == "CentOS"
+

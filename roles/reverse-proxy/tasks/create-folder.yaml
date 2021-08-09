@@ -1,0 +1,27 @@
+- name: Creating Webserver certificate location
+  file:
+    path: /etc/nginx/certs/{{ item.fulldomainname }}
+    state: directory
+    mode: '644'
+    owner: root
+    group: root
+  loop: "{{ server.info }}"
+  tags: Website certs
+  
+- name: Creating Authentication Folder
+  file:
+    path: /etc/nginx/authentication
+    state: directory
+    mode: '755'
+    owner: root
+    group: root
+  tags: authentication directory
+
+- name: Creating configuration location
+  file:
+    path: /etc/nginx/conf.d/{{ fulldomain }}
+    state: directory
+    mode: '644'
+    owner: root
+    group: root
+  tags: website config directory 
