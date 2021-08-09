@@ -1,0 +1,66 @@
+---
+# tasks file for roles/webserver
+
+# Debian
+- block:
+  - name: Creating User
+    user:
+      name: "{{ item.name }}"
+      create_home: yes
+      append: "{{ item.append }}"
+      groups: "{{ item.group }}"
+      shell: "{{ item.shell }}"
+      password: "{{ item.password | password_hash('sha512') }}"
+      state: present
+    loop: "{{ SudoUserLists.users }}"
+
+  - name: Creating ssh directory
+    file:
+      path: "{{ item.home }}/.ssh"
+      state: directory
+      mode: "700"
+      owner: "{{ item.name }}"
+      group: "{{ item.name }}"
+    loop: "{{ SudoUserLists.users }}"
+
+  - name: Adding user key
+    copy:
+      content: "{{ item.pubkey }}"
+      dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+      mode: "600"
+      owner: "{{ item.name }}"
+      group: "{{ item.name }}"
+    loop: "{{ SudoUserLists.users }}"
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+# CentOS
+- block: 
+  - name: Creating User
+    user:
+      name: "{{ item.name }}"
+      create_home: yes
+      append: "{{ item.append }}"
+      groups: "{{ item.group }}"
+      shell: "{{ item.shell }}"
+      password: "{{ item.password | password_hash('sha512') }}"
+      state: present
+    loop: "{{ WheelUserLists.users }}"
+
+  - name: Creating ssh directory
+    file:
+      path: "{{ item.home }}/.ssh"
+      state: directory
+      mode: "700"
+      owner: "{{ item.name }}"
+      group: "{{ item.name }}"
+    loop: "{{ WheelUserLists.users }}"
+
+  - name: Adding user key
+    copy:
+      content: "{{ item.pubkey }}"
+      dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+      mode: "600"
+      owner: "{{ item.name }}"
+      group: "{{ item.name }}"
+    loop: "{{ WheelUserLists.users }}"
+  when: ansible_facts['distribution'] == "CentOS"
