@@ -2,6 +2,21 @@
 # handlers file for roles/local-confdig
 
 - name: Restart Netplan
-  command: sudo netplan apply
+  command: netplan apply
   async: 45
   poll: 0
+
+- name: Restart Network
+  service:
+    name: network
+    state: restarted
+  async: 45
+  poll: 0
+
+- name: Restart SSH Service
+  service:
+    name: sshd
+    state: restarted
+  async: 45
+  poll: 0
+  
