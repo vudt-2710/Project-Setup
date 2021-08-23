@@ -17,19 +17,18 @@
       state: "present"
     loop: "{{ info.config }}"
     notify: Restart Netplan
-
   - name: Deleting extra ssh config line
     lineinfile:
       path: /etc/ssh/sshd_config
       regexp: "PasswordAuthentication yes"
       state: "absent"
-
   - name: Changing ssh config
     lineinfile:
       path: /etc/ssh/sshd_config
       regexp: "#PasswordAuthentication yes"
       line: "PasswordAuthentication no"
       state: "present"
+    notify: Restart SSH Service
   when: ansible_facts['distribution'] == "Ubuntu"
 
 # CentOS
@@ -38,22 +37,20 @@
     replace:
       path: /etc/sysconfig/network-scripts/ifcfg-eth0
       regexp: "{{ ansible_host }}" 
-      replace: "{{ item.IpAdresss }}"
+      replace: "{{ item.IpAdresss/24 }}"
       #state: "present"
     loop: "{{ info.config }}"
-
-
   - name: Deleting extra ssh config line
     lineinfile:
       path: /etc/ssh/sshd_config
       regexp: "PasswordAuthentication yes"
       state: "absent"
-
   - name: Changing ssh config
     lineinfile:
       path: /etc/ssh/sshd_config
       regexp: '#PasswordAuthentication yes'
       line: "PasswordAuthentication no"
       state: "present"  
+    notify: Restart SSH Service
   when: ansible_facts['distribution'] == "CentOS"
 

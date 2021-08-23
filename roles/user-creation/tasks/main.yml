@@ -12,7 +12,7 @@
       shell: "{{ item.shell }}"
       password: "{{ item.password | password_hash('sha512') }}"
       state: present
-    loop: "{{ SudoUserLists.users }}"
+    loop: "{{ sudo_user.users }}"
 
   - name: Creating ssh directory
     file:
@@ -21,7 +21,7 @@
       mode: "700"
       owner: "{{ item.name }}"
       group: "{{ item.name }}"
-    loop: "{{ SudoUserLists.users }}"
+    loop: "{{ sudo_user.users }}"
 
   - name: Adding user key
     copy:
@@ -30,7 +30,7 @@
       mode: "600"
       owner: "{{ item.name }}"
       group: "{{ item.name }}"
-    loop: "{{ SudoUserLists.users }}"
+    loop: "{{ sudo_user.users }}"
   when: ansible_facts['distribution'] == "Ubuntu"
 
 # CentOS
@@ -44,7 +44,7 @@
       shell: "{{ item.shell }}"
       password: "{{ item.password | password_hash('sha512') }}"
       state: present
-    loop: "{{ WheelUserLists.users }}"
+    loop: "{{ wheel_user.users }}"
 
   - name: Creating ssh directory
     file:
@@ -53,7 +53,7 @@
       mode: "700"
       owner: "{{ item.name }}"
       group: "{{ item.name }}"
-    loop: "{{ WheelUserLists.users }}"
+    loop: "{{ wheel_user.users }}"
 
   - name: Adding user key
     copy:
@@ -62,5 +62,5 @@
       mode: "600"
       owner: "{{ item.name }}"
       group: "{{ item.name }}"
-    loop: "{{ WheelUserLists.users }}"
+    loop: "{{ wheel_user.users }}"
   when: ansible_facts['distribution'] == "CentOS"
