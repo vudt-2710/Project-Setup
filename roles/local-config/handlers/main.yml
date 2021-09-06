@@ -6,17 +6,17 @@
   async: 45
   poll: 0
 
-- name: Restart Network
-  service:
-    name: network
-    state: restarted
-  async: 45
-  poll: 0
+# - name: Restart Network
+#   service:
+#     name: network
+#     state: restarted
+#   async: 2
+#   poll: 0
 
-- name: Restart SSH Service
-  service:
-    name: sshd
-    state: restarted
-  async: 45
-  poll: 0
+# - name: Restart SSH Service
+#   service:
+#     name: sshd
+#     state: restarted
+#   async: 2
+#   poll: 0
   
