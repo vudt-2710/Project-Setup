@@ -1,9 +1,3 @@
-# - name: Starting Nginx service
-#   service:
-#     name: nginx
-#     state: started
-#   tags: start service
-
 - name: Copying configuration
   template:
     src: 'project.j2'
@@ -26,20 +20,3 @@
   tags: authen
   notify:
     - Restarting Reverse-Proxy
-
-# - name: Debug
-#   debug:
-#     msg: "{{ item.ServerName }}.{{ item.fulldomainname }}/{{ random_password }}"
-#   loop: "{{ server.info }}"
-#   tags: debug
-# - name: Edit Configuration
-#   lineinfile:
-#     path: /etc/nginx/nginx.conf
-#     backrefs: yes
-#     regexp: '^(\s*)[#]?include /etc/nginx/conf.d/;*'
-#     line: '\1include /etc/nginx/conf.d/{{ fulldomain }}/*.conf;'
-#     state: "present"
-#   changed_when: true
-#   notify: 
-#    - Restarting Reverse-Proxy
-#   tags: editing config
