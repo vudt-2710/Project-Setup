@@ -1,66 +1,69 @@
 ---
 # tasks file for roles/webserver
 
+# CentOS
+- name: User-Creation on CentOS
+  block:
+    - name: Creating User
+      user:
+        name: "{{ item.name }}"
+        create_home: yes
+        append: "{{ item.append }}"
+        groups: "{{ item.group }}"
+        shell: "{{ item.shell }}"
+        password: "{{ item.password | password_hash('sha512') }}"
+        state: present
+      loop: "{{ wheel_user.users }}"
+
+    - name: Creating ssh directory
+      file:
+        path: "/home/{{ item.name }}/.ssh"
+        state: directory
+        mode: "700"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+      loop: "{{ wheel_user.users }}"
+    - name: Adding user key
+      copy:
+        content: "{{ item.pubkey }}"
+        dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+        mode: "600"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+      loop: "{{ wheel_user.users }}"
+  when: ansible_facts['distribution'] == "CentOS"
+
 # Debian
-- block:
-  - name: Creating User
-    user:
-      name: "{{ item.name }}"
-      create_home: yes
-      append: "{{ item.append }}"
-      groups: "{{ item.group }}"
-      shell: "{{ item.shell }}"
-      password: "{{ item.password | password_hash('sha512') }}"
-      state: present
-    loop: "{{ sudo_user.users }}"
+- name: User-Creation on Ubuntu/Debian
+  block:
+    - name: Creating User
+      user:
+        name: "{{ item.name }}"
+        create_home: yes
+        append: "{{ item.append }}"
+        groups: "{{ item.group }}"
+        shell: "{{ item.shell }}"
+        password: "{{ item.password | password_hash('sha512') }}"
+        state: present
+      loop: "{{ sudo_user.users }}"
 
-  - name: Creating ssh directory
-    file:
-      path: "{{ item.home }}/.ssh"
-      state: directory
-      mode: "700"
-      owner: "{{ item.name }}"
-      group: "{{ item.name }}"
-    loop: "{{ sudo_user.users }}"
+    - name: Creating ssh directory
+      file:
+        path: "/home/{{ item.name }}/.ssh"
+        state: directory
+        mode: "700"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+      loop: "{{ sudo_user.users }}"
 
-  - name: Adding user key
-    copy:
-      content: "{{ item.pubkey }}"
-      dest: "/home/{{ item.name }}/.ssh/authorized_keys"
-      mode: "600"
-      owner: "{{ item.name }}"
-      group: "{{ item.name }}"
-    loop: "{{ sudo_user.users }}"
+    - name: Adding user key
+      copy:
+        content: "{{ item.pubkey }}"
+        dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+        mode: "600"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+      loop: "{{ sudo_user.users }}"
   when: ansible_facts['distribution'] == "Ubuntu"
 
-# CentOS
-- block: 
-  - name: Creating User
-    user:
-      name: "{{ item.name }}"
-      create_home: yes
-      append: "{{ item.append }}"
-      groups: "{{ item.group }}"
-      shell: "{{ item.shell }}"
-      password: "{{ item.password | password_hash('sha512') }}"
-      state: present
-    loop: "{{ wheel_user.users }}"
 
-  - name: Creating ssh directory
-    file:
-      path: "{{ item.home }}/.ssh"
-      state: directory
-      mode: "700"
-      owner: "{{ item.name }}"
-      group: "{{ item.name }}"
-    loop: "{{ wheel_user.users }}"
-
-  - name: Adding user key
-    copy:
-      content: "{{ item.pubkey }}"
-      dest: "/home/{{ item.name }}/.ssh/authorized_keys"
-      mode: "600"
-      owner: "{{ item.name }}"
-      group: "{{ item.name }}"
-    loop: "{{ wheel_user.users }}"
-  when: ansible_facts['distribution'] == "CentOS"
