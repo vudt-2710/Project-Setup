@@ -1,16 +1,13 @@
-# vm.yaml
 ---
 - hosts: project
+  vars_files: 
+    - "group_vars/main.yml"
   become: yes
   roles:
-#    - user-creation
-#    - local-config
-#   - reverse-proxy
-    - webservers
-# - hosts: wordpress-server
-#   become: yes
-#   roles:
-#    - webservers
+   - user-creation
+   - local-config
+   - reverse-proxy
+
 
 
       
