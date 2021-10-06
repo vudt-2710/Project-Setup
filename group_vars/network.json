@@ -1,0 +1,8 @@
+{
+    "config": [
+        {
+            "hostname" : "ansible",
+            "IpAdresss": "172.16.200.20"
+        }
+    ]
+}

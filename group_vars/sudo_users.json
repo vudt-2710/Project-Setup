@@ -1,0 +1,14 @@
+{
+    "users": [
+    {
+            "name"      : "test1",
+            "home"      : "/home/test1",
+            "shell"     : "/bin/bash",
+            "group"     : "sudo",
+            "append"    : "yes",
+            "password"  : "Aa@123456",
+            "state"     : "present",
+            "pubkey"   : "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHKw/yIDC2N6HAdFWOUGdnFMkgomSC+nMAImFgAjBaCalCEKDVxj7GD3gNKBKow7FY7b5yZrR5JFq4ZTNp+WOOkUMjNbxlG4Xy/1JF6ZsOflemmvxL3wURHjHyNDPN4djPPrJol/GW3Ngl65W0KMn6wEw/DIDymHP3FyYLEB2HrwYBdlVnTcWfEm+a4hXwNQXkPKgIxT7h4Hn7WNsgtOws2g/jzFZSMz1Wp1k6kIriYLZ9Q83Iqc1/i7V4UejTo65ejP6nVwDVBbTtpYk8pE6OKgf4Pyahbb0J3O49bgYXfG+UF+wgMEJzPxLMMgXsQHwXBIEtbQM9uPyTFOCK060X SUN-ASTERISK\nguyen.hong.ky@b122344-lt"
+    }
+    ]
+}
