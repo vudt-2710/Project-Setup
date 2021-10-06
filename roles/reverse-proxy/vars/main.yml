@@ -1,7 +1,0 @@
----
-# vars file for roles/reverse-proxy
-
-server: "{{ lookup('file', '../vars/info.json') }}"
-
-fulldomain: "{{ server.info[0].fulldomainname }}"
-domain: "{{ server.info[0].domainname }}"
