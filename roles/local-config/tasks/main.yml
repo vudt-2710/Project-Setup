@@ -6,6 +6,14 @@
     name: "{{ item.hostname }}"
   loop: "{{ info.config }}"
 
+- name: Changing /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '127.0.0.1 template'
+    line: "127.0.0.1 {{ item.hostname }}"
+    state: "present"
+  loop: "{{ info.config }}"
+  
 # CentOS
 - name: CentOS Local Config
   block:
