@@ -1,0 +1,18 @@
+{
+    "info": [
+        {
+            "ServerName" : "website1",
+            "IpAdresss": "172.16.200.21:8000",
+            "fulldomainname": "sun-asterisk.vn",
+            "domainname": "sun-asterisk",
+            "password": "h!CIqt1EcXp&w6oAvP5$"
+        },
+        {
+            "ServerName" : "website2",
+            "IpAdresss": "172.16.200.12",
+            "fulldomainname": "sun-asterisk.vn",
+            "domainname": "sun-asterisk",
+            "password": "!Dwd^zt&LnhM48iF@Gh3"
+        }
+    ]
+}
