@@ -1,8 +1,0 @@
----
-# vars file for roles/local-confdig
-
-info: "{{ lookup('file', '../vars/infor.json') }}"
-
-netplan: "{{ lookup('file', '../vars/netplan.json') }}"
-
-network: "{{ lookup('file', '../vars/network.json') }}"
