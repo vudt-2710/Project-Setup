@@ -1,0 +1,76 @@
+server {
+	listen 80;
+	server_name {{ item.ServerName }}.sun-asterisk.vn;
+	return 301 https://$server_name$request_uri;
+}
+server {
+	listen 443;
+	server_name {{ item.ServerName }}.sun-asterisk.vn;
+
+	error_page 404 /404;
+
+	auth_basic "{{ item.ServerName }}.sun-asterisk.vn";
+	auth_basic_user_file /etc/nginx/authen/.htpasswd-{{ item.ServerName }};
+
+	# IP Custommer
+	#allow 0.0.0.0/32;
+	# IP Da Nang
+	allow 14.176.232.181/32;
+	allow 118.69.176.252/32;
+	allow 42.116.19.204/32;
+	allow 172.16.0.0/16;
+	# IP Keang Nam
+	allow 1.55.242.188/32;
+	allow 42.112.114.236/32;
+	allow 116.97.243.74/32;
+	allow 103.37.29.230/32;
+	allow 14.160.25.214/32;
+	allow 42.116.7.14/32;
+	allow 192.168.0.0/16;
+	allow 10.0.0.0/8;
+	# IP Handico
+	allow 113.190.253.26/32;
+	# IP Ho Chi Minh
+	allow 14.161.42.46/32;
+	allow 118.69.186.112/32;
+	allow 172.17.0.0/22;
+	allow 10.10.1.0/24;
+
+	deny all;
+
+	access_log /var/log/nginx/{{ item.ServerName }}.sun-asterisk.vn.access.log;
+	error_log /var/log/nginx/{{ item.ServerName }}.sun-asterisk.vn.error.log;
+
+	ssl on;
+	   ssl_certificate /etc/nginx/certs/sun-asterisk.vn/sun-asterisk_bundle.crt;
+           ssl_certificate_key /etc/nginx/certs/sun-asterisk.vn/sun-asterisk.key;
+           ssl_session_timeout 5m;
+           ssl_protocols TLSv1.2;
+           ssl_verify_client off;
+           ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+           ssl_prefer_server_ciphers on;
+
+	location / {
+	   # Enable CORS
+           if ($request_method = OPTIONS ) {
+           add_header       Access-Control-Allow-Origin "*";
+           add_header       Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, PATCH, DELETE";
+           add_header       Access-Control-Allow-Headers "*";
+           add_header       Access-Control-Allow-Credentials "true";
+           add_header       Content-Length 0;
+           add_header       Content-Type text/plain;
+           return           200;
+      }
+	   # Proxy by_pass
+	   proxy_redirect off;
+	   proxy_set_header X-Real-IP $remote_addr;
+	   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	   proxy_set_header Host $http_host;
+	   proxy_set_header X-Forwarded-Proto https;
+           proxy_pass http://{{ item.IpAdresss }};
+           proxy_http_version 1.1;
+	   proxy_set_header Upgrade $http_upgrade;
+	   proxy_set_header Connection "upgrade";
+	   proxy_read_timeout 86400;
+     }
+}

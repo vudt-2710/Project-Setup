@@ -15,7 +15,7 @@
     password: "{{ item.password }}"
     owner: root
     group: www-data
-    mode: 0640
+    mode: '640'
   loop: "{{ server.info }}"
   tags: authen
   notify:
