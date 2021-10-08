@@ -3,16 +3,16 @@
 
 - name: Changing Hostname
   hostname: 
-    name: "{{ item.hostname }}"
-  loop: "{{ info.config }}"
+    name: "{{ item.ServerName }}"
+  loop: "{{ server.info }}"
 
 - name: Changing /etc/hosts
   lineinfile:
     path: /etc/hosts
     regexp: '127.0.0.1 template'
-    line: "127.0.0.1 {{ item.hostname }}"
+    line: "127.0.0.1 {{ item.ServerName }}"
     state: "present"
-  loop: "{{ info.config }}"
+  loop: "{{ server.info }}"
   
 # CentOS
 - name: CentOS Local Config
@@ -22,18 +22,21 @@
         path: /etc/sysconfig/network-scripts/ifcfg-eth0
         regexp: "{{ ansible_host }}" 
         replace: "{{ item.IpAdresss }}"
-      loop: "{{ info.config }}"
+      loop: "{{ server.info }}"
+
     - name: Deleting extra ssh config line
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: "PasswordAuthentication yes"
         state: "absent"
+
     - name: Changing ssh config
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '#PasswordAuthentication yes'
         line: "PasswordAuthentication no"
         state: "present"  
+
   when: ansible_facts['distribution'] == "CentOS"
 
 # Debian
@@ -46,17 +49,26 @@
         regexp: '^(\s*)[#]?- {{ ansible_host }}(: )*' 
         line: '\1- {{ item.IpAdresss }}/24'
         state: "present"
-      loop: "{{ info.config }}"
-      notify: Restart Netplan
+      loop: "{{ server.info }}"
+      register: ip_status
+
+    - name: Restart Netplan
+      command: netplan apply
+      async: 45
+      poll: 0
+      when: ip_status is changed
+
     - name: Deleting extra ssh config line
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: "PasswordAuthentication yes"
         state: "absent"
+
     - name: Changing ssh config
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: "#PasswordAuthentication yes"
         line: "PasswordAuthentication no"
         state: "present"
+
   when: ansible_facts['distribution'] == "Ubuntu"
