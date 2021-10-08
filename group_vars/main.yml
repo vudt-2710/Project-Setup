@@ -1,11 +1,7 @@
-info_ip: "{{ lookup('file', 'ip.json') }}"
-netplan: "{{ lookup('file', 'netplan.json') }}"
-network: "{{ lookup('file', 'network.json') }}"
-
-
-server: "{{ lookup('file', 'reverse.json') }}"
-fulldomain: "{{ server.reverse[0].fulldomainname }}"
-domain: "{{ server.reverse[0].domainname }}"
+server: "{{ lookup('file', 'server_info.json') }}"
+fulldomain: "{{ server.info[0].fulldomainname }}"
+domain: "{{ server.info[0].domainname }}"
 
 sudo_user: "{{ lookup('file', 'sudo_users.json') }}"
 wheel_user: "{{ lookup('file', 'wheel_users.json') }}"
+packages: ['docker', 'mysql', 'nginx']
