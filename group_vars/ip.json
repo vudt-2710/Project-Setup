@@ -1,8 +1,0 @@
-{
-    "config": [
-        {
-            "hostname" : "gluster",
-            "IpAdresss": "172.16.200.29"
-        }
-    ]
-}
