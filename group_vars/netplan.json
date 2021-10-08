@@ -1,8 +1,0 @@
-{
-    "config": [
-        {
-            "hostname" : "econsent",
-            "IpAdresss": "172.16.200.79/24"
-        }
-    ]
-}
