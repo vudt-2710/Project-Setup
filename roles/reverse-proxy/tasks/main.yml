@@ -1,29 +1,28 @@
-- name: Copying configuration
-  template:
-    src: 'project.j2'
-    dest: '/etc/nginx/conf.d/{{ item.ServerName }}.{{ item.fulldomainname }}.conf'
-    owner: root
-    group: root
-    mode: '644'
-  loop: "{{ server.info }}"
-  tags: copy
-  register: vm_config_status
+- name: Reverse Proxy Setup
+  become: yes
+  block:
+    - name: Copying configuration
+      template:
+        src: 'project.j2'
+        dest: '/etc/nginx/conf.d/{{ item.ServerName }}.{{ item.fulldomainname }}.conf'
+        owner: root
+        group: root
+        mode: "644"
+      loop: "{{ server.info }}"
 
-- name: Generate Basic Authen
-  htpasswd:
-    path: /etc/nginx/authen/.htpasswd-{{ item.ServerName }}
-    name: "{{ item.ServerName }}.{{ item.fulldomainname }}"
-    password: "{{ item.password }}"
-    owner: root
-    group: www-data
-    mode: '640'
-  loop: "{{ server.info }}"
-  tags: ba
-  register: ba_status
+    - name: Generate Basic Authen
+      htpasswd:
+        path: /etc/nginx/authen/.htpasswd-{{ item.ServerName }}
+        name: "{{ item.ServerName }}.{{ item.fulldomainname }}"
+        password: "{{ item.password }}"
+        owner: root
+        group: www-data
+        mode: '640'
+      loop: "{{ server.info }}"
 
-- name: Reload Reverse-Proxy
-  service:
-    name: nginx
-    state: reloaded
-  when: vm_config_status is changed or ba_status is changed
+    - name: Reload Reverse-Proxy
+      service:
+        name: nginx
+        state: reloaded
+
 

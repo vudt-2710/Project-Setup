@@ -13,7 +13,7 @@ server {
 	auth_basic_user_file /etc/nginx/authen/.htpasswd-{{ item.ServerName }};
 
 	# IP Custommer
-	#allow 0.0.0.0/32;
+	# allow 0.0.0.0/32;
 	# IP Da Nang
 	allow 14.176.232.181/32;
 	allow 118.69.176.252/32;
@@ -67,7 +67,7 @@ server {
 	   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	   proxy_set_header Host $http_host;
 	   proxy_set_header X-Forwarded-Proto https;
-           proxy_pass http://{{ item.IpAdresss }};
+           proxy_pass http://{{ item.IpAdresss }}:{{ item.port }};
            proxy_http_version 1.1;
 	   proxy_set_header Upgrade $http_upgrade;
 	   proxy_set_header Connection "upgrade";

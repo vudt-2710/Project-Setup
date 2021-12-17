@@ -1,13 +1,14 @@
 ---
-- hosts: cloud-server
-  vars_files: 
-    - "group_vars/main.yml"
+- hosts: project-servers
   become: yes
   roles:
    - user-creation
    - local-config
-  #  - reverse-proxy
 
+- hosts: proxy-server
+  become: yes
+  roles:
+   - reverse-proxy
 
 
       
