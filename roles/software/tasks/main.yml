@@ -1,32 +1,23 @@
 - name: Ubuntu Server
+  become: yes
   block:  
     - name: Update Cache
       apt:
         update_cache: yes
-      tags: update
-
-    - name: Make sure it is not dpkg lock error
-      file:
-        path: "{{ item }}"
-        state: absent
-      loop: "{{ dpk_log }}"
-      register: delete_status
-      tags: delete
     
     - name: Install packages
       apt:
         name: "{{ item }}"
         state: present
       loop: "{{ packages }}"
-
   when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: CentOS Server
+  become: yes
   block:  
     - name: Update Cache
       yum:
         update_cache: yes
-      tags: update
       
     - name: Update existing packages
       yum:
@@ -37,5 +28,4 @@
         name: "{{ item }}"
         state: present
       loop: "{{ packages }}"
-      
   when: ansible_facts['distribution'] == "CentOS"
