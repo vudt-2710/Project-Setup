@@ -9,6 +9,7 @@
         group: root
         mode: "644"
       loop: "{{ server.info }}"
+      register: template_status
 
     # - name: Generate Basic Authen
     #   htpasswd:
@@ -23,6 +24,7 @@
     - name: Generate Basic Authen
       command: "htpasswd -c -b /etc/nginx/authen/.htpasswd-{{ item.ServerName }} {{ item.ServerName }}.{{ item.fulldomainname }} {{ item.password }}"
       loop: "{{ server.info }}"
+      when: template_status is changed
 
     - name: Reload Reverse-Proxy
       service:
