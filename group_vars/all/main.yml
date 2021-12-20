@@ -4,4 +4,3 @@ domain: "{{ server.info[0].domainname }}"
 
 sudo_user: "{{ lookup('file', 'group_vars/all/sudo_users.json') }}"
 wheel_user: "{{ lookup('file', 'group_vars/all/wheel_users.json') }}"
-packages: ['docker', 'mysql', 'nginx']
