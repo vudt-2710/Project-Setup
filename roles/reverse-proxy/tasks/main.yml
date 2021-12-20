@@ -10,19 +10,24 @@
         mode: "644"
       loop: "{{ server.info }}"
 
+    # - name: Generate Basic Authen
+    #   htpasswd:
+    #     path: /etc/nginx/authen/.htpasswd-{{ item.ServerName }}
+    #     name: "{{ item.ServerName }}.{{ item.fulldomainname }}"
+    #     password: "{{ item.password }}"
+    #     owner: root
+    #     group: root
+    #     mode: '640'
+    #   loop: "{{ server.info }}"
+    
     - name: Generate Basic Authen
-      htpasswd:
-        path: /etc/nginx/authen/.htpasswd-{{ item.ServerName }}
-        name: "{{ item.ServerName }}.{{ item.fulldomainname }}"
-        password: "{{ item.password }}"
-        owner: root
-        group: www-data
-        mode: '640'
+      command: "htpasswd -c -b /etc/nginx/authen/.htpasswd-{{ item.ServerName }} {{ item.ServerName }}.{{ item.fulldomainname }} {{ item.password }}"
       loop: "{{ server.info }}"
 
     - name: Reload Reverse-Proxy
       service:
         name: nginx
         state: reloaded
+      
 
 
