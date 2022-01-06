@@ -36,7 +36,7 @@
         regexp: '#PasswordAuthentication yes'
         line: "PasswordAuthentication no"
         state: "present"  
-
+      notify: Restart SSH Service
   when: ansible_facts['distribution'] == "CentOS"
 
 # Debian
@@ -70,5 +70,5 @@
         regexp: "#PasswordAuthentication yes"
         line: "PasswordAuthentication no"
         state: "present"
-
+      notify: Restart SSH Service
   when: ansible_facts['distribution'] == "Ubuntu"

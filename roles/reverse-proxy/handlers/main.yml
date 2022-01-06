@@ -1,0 +1,4 @@
+- name: Reload Reverse-Proxy
+  service:
+    name: nginx
+    state: reloaded
