@@ -1,31 +1,21 @@
 - name: Ubuntu Server
   become: yes
   block:  
-    - name: Update Cache
-      apt:
-        update_cache: yes
-    
     - name: Install packages
       apt:
         name: "{{ item }}"
         state: present
+        update_cache: yes
       loop: "{{ packages }}"
   when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: CentOS Server
   become: yes
   block:  
-    - name: Update Cache
-      yum:
-        update_cache: yes
-      
-    - name: Update existing packages
-      yum:
-        update_only: yes
-
     - name: Install packages
       yum:
         name: "{{ item }}"
         state: present
+        update_cache: yes
       loop: "{{ packages }}"
   when: ansible_facts['distribution'] == "CentOS"

@@ -29,7 +29,6 @@
         owner: "{{ item.name }}"
         group: "{{ item.name }}"
       loop: "{{ wheel_user.users }}"
-
   when: ansible_facts['distribution'] == "CentOS"
 
 # Debian
@@ -63,7 +62,6 @@
         owner: "{{ item.name }}"
         group: "{{ item.name }}"
       loop: "{{ sudo_user.users }}"
-
   when: ansible_facts['distribution'] == "Ubuntu"
 
 
