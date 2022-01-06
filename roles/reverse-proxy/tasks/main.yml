@@ -24,12 +24,8 @@
     - name: Generate Basic Authen
       command: "htpasswd -c -b /etc/nginx/authen/.htpasswd-{{ item.ServerName }} {{ item.ServerName }}.{{ item.fulldomainname }} {{ item.password }}"
       loop: "{{ server.info }}"
+      notify: Reload Reverse-Proxy
       when: template_status is changed
-
-    - name: Reload Reverse-Proxy
-      service:
-        name: nginx
-        state: reloaded
       
 
 
