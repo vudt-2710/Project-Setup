@@ -23,6 +23,10 @@ Install ansible with pip (highly recommmeded)
 ```
 pip install --user ansible ansible-core
 ```
+> If some how the command is not found, manually create symbolic links to python pip package with this command
+```bash
+ln -s $SOURCE_FILE $DESTINATION
+```
 
 Change the information of the server from the [group_vars](./group_vars/all/)
 
@@ -33,8 +37,8 @@ ansible-playbook setup.yml -vvv
 ```
 
 ## Know Limitations
-* The playbook only works with one server because the nature of ansible when it comes to IP address is static. Futhermore, the template from the company has the same IP address across newly created VMs which is  ```172.16.200.12```. If the ticket happened to be 2 server then we will have to manually change the IP address of these servers and run the playbook if we want to run it simutanously, thus making this part of the playbook useless 
-```
+* The playbook only works with one server because the nature of ansible when it comes to IP address is static. Futhermore, the template from the company has the same IP address across newly created VMs for example  ```172.16.200.12``` or no IP at all so if the ticket happened to have 2 servers then we will either run each of them one at the time or manually change the IP address of these servers and run the playbook if we want to run it simutanously, thus making this part of the playbook useless
+```yml
 - name: Changing IP Address
   lineinfile:
     path: /etc/netplan/00-installer-config.yaml
