@@ -9,7 +9,7 @@
 - name: Changing /etc/hosts
   lineinfile:
     path: /etc/hosts
-    regexp: '127.0.0.1 template'
+    regexp: "127.0.0.1 {{ ansible_hostname }}"
     line: "127.0.0.1 {{ item.ServerName }}"
     state: "present"
   loop: "{{ server.info }}"
@@ -42,6 +42,20 @@
 # Debian
 - name: Ubuntu/Debian Local Config
   block:
+    # - name: Deleting extra ssh config line
+    #   lineinfile:
+    #     path: /etc/ssh/sshd_config
+    #     regexp: "PasswordAuthentication yes"
+    #     state: "absent"
+
+    - name: Changing ssh config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "PasswordAuthentication yes"
+        line: "PasswordAuthentication no"
+        state: "present"
+      notify: Restart SSH Service
+
     - name: Changing IP Address
       lineinfile:
         path: /etc/netplan/00-installer-config.yaml
@@ -50,25 +64,5 @@
         line: '\1- {{ item.IpAdresss }}/24'
         state: "present"
       loop: "{{ server.info }}"
-      register: ip_status
-
-    - name: Restart Netplan
-      command: netplan apply
-      async: 45
-      poll: 0
-      when: ip_status is changed
-
-    - name: Deleting extra ssh config line
-      lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: "PasswordAuthentication yes"
-        state: "absent"
-
-    - name: Changing ssh config
-      lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: "#PasswordAuthentication yes"
-        line: "PasswordAuthentication no"
-        state: "present"
-      notify: Restart SSH Service
+      notify: Restart Netplan
   when: ansible_facts['distribution'] == "Ubuntu"
