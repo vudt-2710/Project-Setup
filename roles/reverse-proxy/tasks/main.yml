@@ -1,5 +1,4 @@
 - name: Reverse Proxy Setup
-  become: yes
   block:
     - name: Copying configuration
       template:
@@ -9,7 +8,6 @@
         group: root
         mode: "644"
       loop: "{{ server.info }}"
-      register: template_status
 
     # - name: Generate Basic Authen
     #   htpasswd:
@@ -22,10 +20,11 @@
     #   loop: "{{ server.info }}"
     
     - name: Generate Basic Authen
-      command: "htpasswd -c -b /etc/nginx/authen/.htpasswd-{{ item.ServerName }} {{ item.ServerName }}.{{ item.fulldomainname }} {{ item.password }}"
+      command:  "htpasswd -c -b .htpasswd-{{ item.ServerName }} {{ item.ServerName }}.{{ item.fulldomainname }} {{ item.password }}"
+      args:
+        chdir: /etc/nginx/authen/
       loop: "{{ server.info }}"
       notify: Reload Reverse-Proxy
-      when: template_status is changed
       
 
 

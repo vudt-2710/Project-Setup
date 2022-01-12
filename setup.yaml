@@ -2,13 +2,13 @@
 - hosts: project-servers
   become: yes
   roles:
-   - user-creation
-   - local-config
+    - user-creation
+    - local-config
 
 - hosts: proxy-server
   become: yes
   roles:
-   - reverse-proxy
+    - reverse-proxy
 
 
       
