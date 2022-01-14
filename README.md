@@ -55,4 +55,5 @@ ansible-playbook setup.yml -vvv
   poll: 0
   when: ip_status is changed
 ```
+* Any public key that has a backward slash followed by a character, will be treated as an escape character, in order to resolve this, use double backward slash ```\\```
 * The role ```software``` is only intended to use to install package from a package manager (i.e system packages) not packages that install on user environment 
