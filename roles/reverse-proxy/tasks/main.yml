@@ -3,16 +3,16 @@
     - name: Copying configuration
       template:
         src: 'project.j2'
-        dest: '/etc/nginx/conf.d/{{ item.ServerName }}.{{ item.fulldomainname }}.conf'
+        dest: '/etc/nginx/conf.d/{{ item.servername }}.{{ item.domainname }}.conf'
         owner: root
         group: root
         mode: "644"
-      loop: "{{ server.info }}"
+      loop: "{{ proxy_info.list }}"
 
     # - name: Generate Basic Authen
     #   htpasswd:
-    #     path: /etc/nginx/authen/.htpasswd-{{ item.ServerName }}
-    #     name: "{{ item.ServerName }}.{{ item.fulldomainname }}"
+    #     path: /etc/nginx/authen/.htpasswd-{{ item.servername }}
+    #     name: "{{ item.servername }}.{{ item.domainname }}"
     #     password: "{{ item.password }}"
     #     owner: root
     #     group: root
@@ -20,10 +20,10 @@
     #   loop: "{{ server.info }}"
     
     - name: Generate Basic Authen
-      command:  "htpasswd -c -b .htpasswd-{{ item.ServerName }} {{ item.ServerName }}.{{ item.fulldomainname }} {{ item.password }}"
+      command:  "htpasswd -c -b .htpasswd-{{ item.servername }} {{ item.servername }}.{{ item.domainname }} {{ item.authen_password }}"
       args:
         chdir: /etc/nginx/authen/
-      loop: "{{ server.info }}"
+      loop: "{{ proxy_info.list }}"
       notify: Reload Reverse-Proxy
       
 

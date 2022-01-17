@@ -1,17 +1,17 @@
 #jinja2: lstrip_blocks: True, trim_blocks: True
 server {
 	listen 80;
-	server_name {{ item.ServerName }}.sun-asterisk.vn;
+	server_name {{ item.servername }}.{{ item.domainname }};
 	return 301 https://$server_name$request_uri;
 }
 server {
 	listen 443;
-	server_name {{ item.ServerName }}.sun-asterisk.vn;
+	server_name {{ item.servername }}.{{ item.domainname }};
 
 	error_page 404 /404;
 
-	auth_basic "{{ item.ServerName }}.sun-asterisk.vn";
-	auth_basic_user_file /etc/nginx/authen/.htpasswd-{{ item.ServerName }};
+	auth_basic "{{ item.servername }}.{{ item.domainname }}";
+	auth_basic_user_file /etc/nginx/authen/.htpasswd-{{ item.servername }};
 
 	# IP Custommer
 	# allow 0.0.0.0/32;
@@ -39,12 +39,12 @@ server {
 
 	deny all;
 
-	access_log /var/log/nginx/{{ item.ServerName }}.sun-asterisk.vn.access.log;
-	error_log /var/log/nginx/{{ item.ServerName }}.sun-asterisk.vn.error.log;
+	access_log /var/log/nginx/{{ item.servername }}.{{ item.domainname }}.access.log;
+	error_log /var/log/nginx/{{ item.servername }}.{{ item.domainname }}.error.log;
 
 	ssl on;
-	   ssl_certificate /etc/nginx/certs/sun-asterisk.vn/sun-asterisk_bundle.crt;
-           ssl_certificate_key /etc/nginx/certs/sun-asterisk.vn/sun-asterisk.key;
+	   ssl_certificate /etc/nginx/certs/{{ item.domainname }}/sun-asterisk_bundle.crt;
+           ssl_certificate_key /etc/nginx/certs/{{ item.domainname }}/sun-asterisk.key;
            ssl_session_timeout 5m;
            ssl_protocols TLSv1.2;
            ssl_verify_client off;
@@ -68,7 +68,7 @@ server {
 	   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	   proxy_set_header Host $http_host;
 	   proxy_set_header X-Forwarded-Proto https;
-	   proxy_pass http://{{ item.IpAdresss }}:{{ item.port }};
+	   proxy_pass http://{{ item.ipv4 }}:{{ item.port }};
 	   proxy_http_version 1.1;
 	   proxy_set_header Upgrade $http_upgrade;
 	   proxy_set_header Connection "upgrade";

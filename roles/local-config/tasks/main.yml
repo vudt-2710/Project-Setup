@@ -3,14 +3,14 @@
 
 - name: Changing Hostname
   hostname: 
-    name: "{{ item.ServerName }}"
+    name: "{{ item.project }}"
   loop: "{{ server.info }}"
 
 - name: Changing /etc/hosts
   lineinfile:
     path: /etc/hosts
     regexp: "127.0.0.1 {{ ansible_hostname }}"
-    line: "127.0.0.1 {{ item.ServerName }}"
+    line: "127.0.0.1 {{ item.project }}"
     state: "present"
   loop: "{{ server.info }}"
   
@@ -21,7 +21,7 @@
       replace:
         path: /etc/sysconfig/network-scripts/ifcfg-eth0
         regexp: "{{ ansible_host }}" 
-        replace: "{{ item.IpAdresss }}"
+        replace: "{{ item.ipv4 }}"
       loop: "{{ server.info }}"
 
     - name: Deleting extra ssh config line
@@ -61,7 +61,7 @@
         path: /etc/netplan/00-installer-config.yaml
         backrefs: yes
         regexp: '^(\s*)[#]?- {{ ansible_host }}(: )*' 
-        line: '\1- {{ item.IpAdresss }}/24'
+        line: '\1- {{ item.ipv4 }}/24'
         state: "present"
       loop: "{{ server.info }}"
       notify: Restart Netplan
