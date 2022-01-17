@@ -1,0 +1,8 @@
+server: "{{ lookup('file', 'group_vars/project-servers/server_info.json') }}"
+sudo_user: "{{ lookup('file', 'group_vars/project-servers/sudo_users.json') }}"
+wheel_user: "{{ lookup('file', 'group_vars/project-servers/wheel_users.json') }}"
+
+packages: 
+  - docker
+  - mysql
+  - nginx

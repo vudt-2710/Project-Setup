@@ -1,0 +1,18 @@
+{
+    "list": [
+        {
+            "servername": "domain1",
+            "domainname": "sun-asterisk.vn",
+            "ipv4": "172.16.200.21",
+            "port": "8000",
+            "authen_password": "password"
+        },
+        {
+            "servername": "domain2",
+            "domainname": "sun-asterisk.vn",
+            "ipv4": "172.16.200.9",
+            "port": "80",
+            "authen_password": "password"
+        }
+    ]
+}

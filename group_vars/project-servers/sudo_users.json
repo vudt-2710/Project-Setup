@@ -1,0 +1,13 @@
+{
+    "users": [
+    {
+            "name"      : "test1",
+            "shell"     : "/bin/bash",
+            "group"     : "sudo",
+            "append"    : "yes",
+            "password"  : "Aa@123456",
+            "state"     : "present",
+            "pubkey"   : "public key"
+    }
+    ]
+}
