@@ -37,14 +37,14 @@ ansible-playbook setup.yml -vvv
 ```
 
 ## Know Limitations
-* The playbook only works with one server because the nature of ansible when it comes to IP address is static. Futhermore, the template from the company has the same IP address across newly created VMs for example  ```172.16.200.12``` or no IP at all so if the ticket happened to have 2 servers then we will either run each of them one at the time or manually change the IP address of these servers and run the playbook if we want to run it simutanously, thus making this part of the playbook useless
+* The playbook only works with one server because the nature of ansible when it comes to IP address is static. Futhermore, the template from the company has the same IP address across newly created VMs for example  ```192.168.1.2``` or no IP at all, so if the ticket happened to have 2 servers then we will either run each of them one at the time or manually change the IP address of these servers and run the playbook if we want to run it once, thus making this part of the playbook useless
 ```yml
 - name: Changing IP Address
   lineinfile:
     path: /etc/netplan/00-installer-config.yaml
     backrefs: yes
     regexp: '^(\s*)[#]?- {{ ansible_host }}(: )*' 
-    line: '\1- {{ item.IpAdresss }}/24'
+    line: '\1- {{ item.ipv4 }}/24'
     state: "present"
   loop: "{{ server.info }}"
   register: ip_status
