@@ -4,11 +4,11 @@
 
 The tasks are separated into different roles, including [user-creation](./roles/user-creation/tasks), [local-config](./roles/local-config/tasks) and [reverse-proxy](./roles/reverse-proxy/tasks)
 
-* In ```user-creation``` will create users, set up group, copy public key and the user information 
+* In ```user-creation``` will create users, set up group, copy public key and etc 
 
-* In ```local-config``` will change the VM IP address, change the hostname and disable ssh password authentication
+* In ```local-config``` will change the server IP address, hostname and disable ssh password authentication 
 
-* In ```reverse-proxy``` will create the project config file from this [template](./roles/reverse-proxy/templates/project.j2) then generated a basic authentication (if required) and finally reload the nginx config
+* In ```reverse-proxy``` will create the project config file from this [template](./roles/reverse-proxy/templates/project.j2) then generated a basic authentication (if required) and finally reload nginx config
 
 * ```sotfware``` is in experimental because some tickets are either using a package manager or script from the internet downloaded by the curl command to install to system wide or user environment
 
@@ -28,10 +28,9 @@ pip install --user ansible ansible-core
 ln -s $SOURCE_FILE $DESTINATION
 ```
 
-Change the information of the server from the [group_vars](./group_vars/all/)
-
 ## Running the playbook 
-> Before running the playbook, change the [configuration](./ansible.cfg) of ansible before running. Then proceed to run the playbook with this command
+> Before running the playbook, change these [ansible config](./ansible.cfg), [group_vars](./group_vars/all/), and [inventory](./inventory/servers.ini) respectively. After that, execute this command to start running the playbook
+
 ```bash
 ansible-playbook setup.yml -vvv
 ```
