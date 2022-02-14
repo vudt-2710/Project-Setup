@@ -1,0 +1,33 @@
+sudo_user:
+  - name: "user1"
+    shell: "/bin/bash"
+    group: "sudo"
+    append: "yes"
+    password: "password"
+    state: "present"
+    pubkey: pubkey
+
+  - name: "user2"
+    shell: "/bin/bash"
+    group: "sudo"
+    append: "yes"
+    password: "password"
+    state: "present"
+    pubkey: pubkey
+
+  - name: "user3"
+    shell: "/bin/bash"
+    group: "sudo"
+    append:  "yes"
+    password: "password"
+    state: "present"
+    pubkey: pubkey
+
+wheel_user:
+  - name: "user1"
+    shell: "/bin/bash"
+    group: "sudo"
+    append:  "yes"
+    password: "password"
+    state: "present"
+    pubkey: pubkey

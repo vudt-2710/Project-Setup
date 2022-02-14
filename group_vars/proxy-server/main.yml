@@ -1,1 +1,0 @@
-proxy_info: "{{ lookup('file', 'group_vars/proxy-server/proxy-info.json') }}"

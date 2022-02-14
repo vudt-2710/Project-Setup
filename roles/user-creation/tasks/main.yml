@@ -10,25 +10,14 @@
         shell: "{{ item.shell }}"
         password: "{{ item.password | password_hash('sha512') }}"
         state: present
-      loop: "{{ wheel_user.users }}"
-
-    - name: Creating ssh directory
-      file:
-        path: "/home/{{ item.name }}/.ssh"
-        state: directory
-        mode: "700"
-        owner: "{{ item.name }}"
-        group: "{{ item.name }}"
-      loop: "{{ wheel_user.users }}"
-
-    - name: Adding user key
-      copy:
-        content: "{{ item.pubkey }}"
-        dest: "/home/{{ item.name }}/.ssh/authorized_keys"
-        mode: "600"
-        owner: "{{ item.name }}"
-        group: "{{ item.name }}"
-      loop: "{{ wheel_user.users }}"
+      loop: "{{ wheel_user }}"
+      
+    - name: Creating User Public Key
+      authorized_key:
+        user: "{{ item.name }}"
+        state: present
+        key: "{{ item.pubkey }}"
+      loop: "{{ wheel_user }}"
   when: ansible_facts['distribution'] == "CentOS"
 
 # Debian
@@ -43,25 +32,14 @@
         shell: "{{ item.shell }}"
         password: "{{ item.password | password_hash('sha512') }}"
         state: present
-      loop: "{{ sudo_user.users }}"
+      loop: "{{ sudo_user }}"
 
-    - name: Creating ssh directory
-      file:
-        path: "/home/{{ item.name }}/.ssh"
-        state: directory
-        mode: "700"
-        owner: "{{ item.name }}"
-        group: "{{ item.name }}"
-      loop: "{{ sudo_user.users }}"
-
-    - name: Adding user key
-      copy:
-        content: "{{ item.pubkey }}"
-        dest: "/home/{{ item.name }}/.ssh/authorized_keys"
-        mode: "600"
-        owner: "{{ item.name }}"
-        group: "{{ item.name }}"
-      loop: "{{ sudo_user.users }}"
+    - name: Creating User Public Key
+      authorized_key:
+        user: "{{ item.name }}"
+        state: present
+        key: "{{ item.pubkey }}"
+      loop: "{{ sudo_user }}"
   when: ansible_facts['distribution'] == "Ubuntu"
 
 
