@@ -1,18 +1,18 @@
 - name: Ubuntu Server
   become: yes
   block:  
-    - name: Install packages
+    - name: Installing System Packages
       apt:
         name: "{{ item }}"
         state: present
         update_cache: yes
-      loop: "{{ packages }}"
+      loop: "{{ sys_packages }}"
   when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: CentOS Server
   become: yes
   block:  
-    - name: Install packages
+    - name: Installing System Packages
       yum:
         name: "{{ item }}"
         state: present

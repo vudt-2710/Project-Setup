@@ -1,0 +1,7 @@
+sys_packages: 
+  - docker
+  - mysql
+  - nginx
+
+user_env_packages:
+  - nginx
