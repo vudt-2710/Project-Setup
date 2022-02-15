@@ -1,7 +1,43 @@
-sys_packages: 
-  - docker
-  - mysql
-  - nginx
+rvm_keyids: 
+  - 409B6B1796C275462A1703113804BB82D39DC0E3
+  - 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 
-user_env_packages:
-  - nginx
+rvm_keylist: "{{ rvm_keyid | join(' ') }}"
+
+redmine_dependencies:
+  - build-essential 
+  - libmysqlclient-dev
+  - imagemagick 
+  - libmagickwand-dev
+  - mysql-client
+  - python3-pexpect
+
+RUBY_ENVIRONMENT: "/home/{{ item }}/.rvm/rubies/ruby-{{ ruby_version }}/bin"
+RVM_ENVIRONMENT: "/home/{{ item }}/.rvm/bin"
+
+install_process:
+  - "~/.rvm/scripts/rvm"
+  - "rvm install {{ ruby_version }}"
+  - "rvm use {{ ruby_version }} --default"
+
+install_process_list: "{{ install_process | join(' && ') }}"
+
+rake_process:
+  - "rake generate_secret_token"
+  - "rake db:migrate RAILS_ENV=production"
+rake_process_list: "{{ rake_process | join(' && ') }}"
+
+selected_language: "en"
+
+redmine_folders:
+  - /var/wwww/{{ redmine_app }}/public/plugin_assets
+  - /var/log/redmine
+  - /var/run/redmine
+
+ruby_version: "3.0.0"
+
+redmine_template_location:
+  - { template: puma.j2, path: "/var/www/{{ redmine_app }}/config/puma.rb" }
+  - { template: init.j2, path: /etc/init.d/redmined }
+  - { template: database.j2, path: "/var/www/{{ redmine_app }}/config/database.yml" }
+  - { template: service.j2 , path: /etc/systemd/system/redmine.service }
