@@ -4,13 +4,6 @@ rvm_keyids:
 
 rvm_keylist: "{{ rvm_keyid | join(' ') }}"
 
-redmine_dependencies:
-  - build-essential 
-  - libmysqlclient-dev
-  - imagemagick 
-  - libmagickwand-dev
-  - mysql-client
-  - python3-pexpect
 
 RUBY_ENVIRONMENT: "/home/{{ item }}/.rvm/rubies/ruby-{{ ruby_version }}/bin"
 RVM_ENVIRONMENT: "/home/{{ item }}/.rvm/bin"
@@ -22,22 +15,3 @@ install_process:
 
 install_process_list: "{{ install_process | join(' && ') }}"
 
-rake_process:
-  - "rake generate_secret_token"
-  - "rake db:migrate RAILS_ENV=production"
-rake_process_list: "{{ rake_process | join(' && ') }}"
-
-selected_language: "en"
-
-redmine_folders:
-  - /var/wwww/{{ redmine_app }}/public/plugin_assets
-  - /var/log/redmine
-  - /var/run/redmine
-
-ruby_version: "3.0.0"
-
-redmine_template_location:
-  - { template: puma.j2, path: "/var/www/{{ redmine_app }}/config/puma.rb" }
-  - { template: init.j2, path: /etc/init.d/redmined }
-  - { template: database.j2, path: "/var/www/{{ redmine_app }}/config/database.yml" }
-  - { template: service.j2 , path: /etc/systemd/system/redmine.service }
