@@ -19,5 +19,4 @@
       shell: "{{ install_process_list }}"
       environment:
         PATH: "{{ RVM_ENVIRONMENT }}:{{ ansible_env.PATH }}"
-
- 
+  become_user: "{{ item }}"
