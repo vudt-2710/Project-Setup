@@ -20,44 +20,4 @@
       environment:
         PATH: "{{ RVM_ENVIRONMENT }}:{{ ansible_env.PATH }}"
 
-    - name: "Installing Bundler on user {{ item }}"
-      gem:
-        name: bundler
-        state: present
-        include_doc: no
-      environment: 
-        PATH: "{{ RUBY_ENVIRONMENT }}:{{ ansible_env.PATH }}"
-    
-    - name: "Adding Puma to Gemfiles on user {{ item }}"
-      lineinfile:
-        path: "{{ redmine_location }}/Gemfile"
-        insertafter: "bundler"
-        line: "gem 'puma'"
-        state: present
-
-    - name: "Installing Gems on user {{ item }}"
-      bundler:
-        state: present
-        chdir: "{{ redmine_location }}"
-        extra_args: "--without development test postgresql sqlite"
-      environment:
-        PATH: "{{ RVM_ENVIRONMENT }}:{{ RUBY_ENVIRONMENT }}:{{ ansible_env.PATH }}"
-      
-    - name: "Rake Process on user {{ item }}"
-      shell: "{{ rake_process_list }}"
-      args:
-        chdir: "{{ redmine_location }}"
-      environment:
-        PATH: "{{ RVM_ENVIRONMENT }}:{{ RUBY_ENVIRONMENT }}:{{ ansible_env.PATH }}"
-      
-    - name: "Load Default config on user {{ item }}"
-      expect:
-        command: "rake {{ redmine_db_name }}:load_default_data RAILS_ENV=production"
-        responses: 
-          'Select language': "{{ selected_language }}"
-      args:
-        chdir: "{{ redmine_location }}"
-      environment:
-        PATH: "{{ RVM_ENVIRONMENT }}:{{ RUBY_ENVIRONMENT }}:{{ ansible_env.PATH }}"
-
-  become_user: "{{ item }}"
+ 
