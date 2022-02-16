@@ -8,28 +8,32 @@
         update_cache: yes
       loop: "{{ sys_packages }}"
 
-    - name: Add Users to sudoer file
-      blockinfile:
-        path: /etc/sudoers
-        block: |
-          %redmine ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
-          {% for item in sudo_user | json_query("[*].name") %}
-          %{{ item }} ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
-          {% endfor %}
-        state: present
-        validate: "/usr/sbin/visudo -cf %s"
+    # - name: Add Users to sudoer file
+    #   blockinfile:
+    #     path: /etc/sudoers
+    #     block: |
+    #       %redmine ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
+    #       {% for item in sudo_user | json_query("[*].name") %}
+    #       %{{ item }} ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
+    #       {% endfor %}
+    #     state: present
+    #     validate: "/usr/sbin/visudo -cf %s"
 
-    - name: Installing User Packages
-      include_tasks: 
-        file: ruby-install.yml
-      loop: '{{ sudo_user | json_query("[*].name") }}'
+    # - name: Installing User Environment Packages
+    #   include_tasks: 
+    #     file: ruby-install.yml
+    #   loop: '{{ sudo_user | json_query("[*].name") }}'
 
-    - name: Delete User to sudoer file
-      blockinfile:
-        path: /etc/sudoers
-        state: absent
-        validate: "/usr/sbin/visudo -cf %s"
-      tags: debug
+    # - name: Installing Docker
+    #   include_tasks:
+    #     file: docker-install.yml
+
+    # - name: Delete User to sudoer file
+    #   blockinfile:
+    #     path: /etc/sudoers
+    #     state: absent
+    #     validate: "/usr/sbin/visudo -cf %s"
+    #   tags: debug
 
   when: ansible_facts['distribution'] == "Ubuntu"
 

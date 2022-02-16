@@ -1,0 +1,38 @@
+- name: A block of tasks
+  block:
+    - name: Install all necessary Docker packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+    
+    - name: Add Docker’s official GPG key
+      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg"
+
+    - name: Get DEB architecture
+      shell: "dpkg --print-architecture"
+      register: deb_architecture
+    
+    - name: Get Ubuntu Version
+      shell: "lsb_release -cs"
+      register: lsb_release
+
+    - name: Add Docker's Repository
+      apt_repository:
+        repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable"
+        state: present
+        filename: docker
+
+    - name: Installing Docker
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop: "{{ docker_packages }}"
+    
+    - name: Add Users to Docker group
+      user:
+        name: "{{ item }}"
+        group: docker
+        append: yes
+      loop: "{{ sudo_user }}"

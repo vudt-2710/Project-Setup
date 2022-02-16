@@ -15,3 +15,19 @@ install_process:
 
 install_process_list: "{{ install_process | join(' && ') }}"
 
+
+sys_packages:
+  - nginx
+  - postgresql 
+  - postgresql-contrib
+
+docker_dependencies:
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+
+docker_packages:
+  - docker-ce 
+  - docker-ce-cli 
+  - containerd.io
