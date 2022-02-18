@@ -6,11 +6,11 @@
         name: "{{ item.name }}"
         create_home: yes
         append: "{{ item.append }}"
-        groups: "{{ item.group }}"
+        groups: wheel
         shell: "{{ item.shell }}"
         password: "{{ item.password | password_hash('sha512') }}"
         state: present
-      loop: "{{ wheel_user }}"
+      loop: "{{ user_list }}"
       
     - name: Creating User Public Key
       authorized_key:
@@ -28,18 +28,18 @@
         name: "{{ item.name }}"
         create_home: yes
         append: "{{ item.append }}"
-        groups: "{{ item.group }}"
+        groups: sudo
         shell: "{{ item.shell }}"
         password: "{{ item.password | password_hash('sha512') }}"
         state: present
-      loop: "{{ sudo_user }}"
+      loop: "{{ user_list }}"
 
     - name: Creating User Public Key
       authorized_key:
         user: "{{ item.name }}"
         state: present
         key: "{{ item.pubkey }}"
-      loop: "{{ sudo_user }}"
+      loop: "{{ user_list }}"
   when: ansible_facts['distribution'] == "Ubuntu"
 
 
