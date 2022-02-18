@@ -22,7 +22,7 @@
     # - name: Installing User Environment Packages
     #   include_tasks: 
     #     file: ruby-install.yml
-    #   loop: '{{ sudo_user | json_query("[*].name") }}'
+    #   loop: '{{ user_list | json_query("[*].name") }}'
 
     # - name: Installing Docker
     #   include_tasks:

@@ -35,4 +35,4 @@
         name: "{{ item }}"
         group: docker
         append: yes
-      loop: "{{ sudo_user }}"
+      loop: "{{ user_list }}"
