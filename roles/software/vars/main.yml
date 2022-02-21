@@ -31,3 +31,43 @@ docker_packages:
   - docker-ce 
   - docker-ce-cli 
   - containerd.io
+
+php_version: "7.4"
+php_packages:
+  - "php{{ php_version }}"
+  - "php{{ php_version }}-fpm"
+
+build_essential_packages: 
+  - net-tools 
+  - autoconf 
+  - libfcgi-dev 
+  - libfcgi0ldbl 
+  - libjpeg-turbo8-dev 
+  - libmcrypt-dev 
+  - libssl-dev 
+  - libc-client2007e 
+  - libc-client2007e-dev 
+  - libxml2-dev 
+  - libbz2-dev 
+  - libcurl4-openssl-dev 
+  - libjpeg-dev 
+  - libpng-dev 
+  - libfreetype6-dev 
+  - libkrb5-dev 
+  - libpq-dev 
+  - libxml2-dev 
+  - libxslt1-dev 
+  - libzip-dev 
+  - libsqlite3-dev 
+  - libonig-dev 
+  - build-essential
+
+php_options: "--with-pdo-pgsql --with-zlib-dir --with-freetype --enable-mbstring --enable-soap --enable-calendar --with-curl --with-zlib --enable-gd --with-pgsql --disable-rpath --enable-inline-optimization --with-bz2 --with-zlib --enable-sockets --enable-sysvsem --enable-sysvshm --enable-pcntl --enable-mbregex --enable-exif --enable-bcmath --with-mhash --with-zip --with-pdo-mysql --with-mysqli --with-mysql-sock=/var/run/mysqld/mysqld.sock --with-jpeg --with-openssl --with-fpm-user=www-data --with-fpm-group=www-data --with-libdir=/lib/x86_64-linux-gnu --enable-ftp --with-imap --with-imap-ssl --with-kerberos --with-gettext --with-xmlrpc --with-xsl --enable-opcache --enable-intl --with-pear --enable-fpm"
+url_php_tarball: "https://www.php.net/distributions/php-{{ php_version }}.tar.gz"
+php_tarfile: "{{ url_php_tarball | basename }}"
+php_prefix: "/opt/php-{{ php_version }}"
+php_date_time: "Asia/Tokyo"
+php_configs:
+  - { src: "/tmp/{{ php_tarfile }}/etc/php-fpm.d/www.conf.default", dest: "{{ php_prefix }}/etc/php-fpm.d/www.conf" }
+  - { src: "/tmp/{{ php_tarfile }}/etc/php-fpm.conf.default", dest: "{{ php_prefix }}/etc/php-fpm.conf" }
+  - { src: "/tmp/{{ php_tarfile }}/php.ini-production", dest: "{{ php_prefix }}/lib/php.ini" }
