@@ -1,0 +1,13 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+[Unit]
+Description=The PHP {{ php_version }} FastCGI Process Manager
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/opt/php-{{ php_version }}/var/run/php-fpm.pid
+ExecStart=/opt/php-{{ php_version }}/sbin/php-fpm --nodaemonize --fpm-config /opt/php-{{ php_version }}/etc/php-fpm.conf
+ExecReload=/bin/kill -USR2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
