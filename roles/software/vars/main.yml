@@ -71,3 +71,6 @@ php_configs:
   - { src: "/tmp/{{ php_tarfile }}/etc/php-fpm.d/www.conf.default", dest: "{{ php_prefix }}/etc/php-fpm.d/www.conf" }
   - { src: "/tmp/{{ php_tarfile }}/etc/php-fpm.conf.default", dest: "{{ php_prefix }}/etc/php-fpm.conf" }
   - { src: "/tmp/{{ php_tarfile }}/php.ini-production", dest: "{{ php_prefix }}/lib/php.ini" }
+
+mariadb_key: "https://mariadb.org/mariadb_release_signing_key.asc"
+mariadb_version: "10.0.38"
