@@ -1,0 +1,22 @@
+- name: Add MariaDB key
+  apt_key:
+    url: "{{ mariadb_key }}"
+    state: present
+
+- name: Get Ubuntu Version
+  shell: "lsb_release -cs"
+  register: lsb_release
+
+- name: Add MariaDB Repository
+  apt_repository:
+    repo: "deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ lsb_release.stdout }} main'"
+
+- name: Update Cache
+  apt:
+    update_cache: yes
+
+- name: "Installing MariaDB-{{ mariadb_version }}"
+  apt: 
+    name: mariadb-server
+    state: present
+
