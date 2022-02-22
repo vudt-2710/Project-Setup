@@ -13,12 +13,13 @@
 - name: A Block of tasks
   block:
     - name: RVM GPG key
-      command: "gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys {{ rvm_keylist }}"
+      command: "gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys {{ item }}"
+      loop: "{{ rvm_keyids }}"
 
-    - name: Installing RVM on User {{ item }}
+    - name: Installing RVM on User {{ user_item }}
       shell: "curl -sSL https://get.rvm.io | bash -s stable"
 
-    - name: "Add RVM environment variable to user {{ item }}"
+    - name: "Add RVM environment variable to user {{ user_item }}"
       blockinfile:
         path: "~/.bashrc"
         block: |
@@ -27,11 +28,12 @@
           fi
           rvm use {{ ruby_version }} --default
 
-    - name: "Installing Ruby-{{ ruby_version }} on user {{ item }}"
-      shell: "{{ install_process_list }}"
+    - name: "Installing Ruby-{{ ruby_version }} on user {{ user_item }}"
+      shell: "{{ item }}"
       environment:
         PATH: "{{ RVM_ENVIRONMENT }}:{{ ansible_env.PATH }}"
-  become_user: "{{ item }}"
+      loop: "{{ install_process }}"
+  become_user: "{{ user_item }}"
 
 - name: Delete User to sudoer file
   blockinfile:

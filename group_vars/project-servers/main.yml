@@ -1,0 +1,21 @@
+user_list:
+  - name: "user1"
+    shell: "/bin/bash"
+    append: "yes"
+    password: "password"
+    state: "present"
+    pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC2wbMg1exRfCld3m0K3gEkqAmnzkm6TjMiXi+W9PrTb/oZdsGcEf+aThW6d+gh39lfkNSxt6/xkywel+uaKH58RwBtM4vqwnTuew5zuCmFVnzZ4hm7Rb7/4GXhf3bpAnO0i+qxdlYUzgG+sMT+nxZ4Pkouw1aoYofE4IIlINQIWu1fZ/al47XSwxtqeAflRZ918q0lBdYFD2gBoKP2E5cgJtFV54ljA5x/uGIMqrzSTkE0rM3YU1xZuTXFmOCQJOrKckWCgjgzvyCQ8HHolHuLRVEU1lBC6u+mpDO9XjqNP4YKIEp3LU5yjouRIPS8EQsvH5UUjV3+zAXRGGBdRh7nj6uE9tsdEUOtaOnA0+x+CXOm59IS+XoYgYRX54cGALc9gLLixaNrmohGcQPixyVTU7k58Slb0VzF0B8Ln9VyzwPEmGkgnxi/Bd4kW1vD/vEXs5IRqFLyEZovRXOkiTBBNa996S1BjnFvvC9MNFvNBus2ummquL5Yxh/Tw3y6le5xNFaGay67EwAdcqdCBWYCbXB8jKmMNOsIxr/Gm7XFxZSrjU8VJvfmylsz/MalLmJenAbnHTil1CyBLTZCYqjfJPzVBUNliIhbryhSAarpv7bifx/A8ToKDmUNjpu0Hbnq+v6jZz1mY2UjAmI3XDVpjZ1p45EVnT9Nj4GhQWtq8Q== nguyenhongky1998@gmail.com"
+
+  - name: "user2"
+    shell: "/bin/bash"
+    append: "yes"
+    password: "password"
+    state: "present"
+    pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC2wbMg1exRfCld3m0K3gEkqAmnzkm6TjMiXi+W9PrTb/oZdsGcEf+aThW6d+gh39lfkNSxt6/xkywel+uaKH58RwBtM4vqwnTuew5zuCmFVnzZ4hm7Rb7/4GXhf3bpAnO0i+qxdlYUzgG+sMT+nxZ4Pkouw1aoYofE4IIlINQIWu1fZ/al47XSwxtqeAflRZ918q0lBdYFD2gBoKP2E5cgJtFV54ljA5x/uGIMqrzSTkE0rM3YU1xZuTXFmOCQJOrKckWCgjgzvyCQ8HHolHuLRVEU1lBC6u+mpDO9XjqNP4YKIEp3LU5yjouRIPS8EQsvH5UUjV3+zAXRGGBdRh7nj6uE9tsdEUOtaOnA0+x+CXOm59IS+XoYgYRX54cGALc9gLLixaNrmohGcQPixyVTU7k58Slb0VzF0B8Ln9VyzwPEmGkgnxi/Bd4kW1vD/vEXs5IRqFLyEZovRXOkiTBBNa996S1BjnFvvC9MNFvNBus2ummquL5Yxh/Tw3y6le5xNFaGay67EwAdcqdCBWYCbXB8jKmMNOsIxr/Gm7XFxZSrjU8VJvfmylsz/MalLmJenAbnHTil1CyBLTZCYqjfJPzVBUNliIhbryhSAarpv7bifx/A8ToKDmUNjpu0Hbnq+v6jZz1mY2UjAmI3XDVpjZ1p45EVnT9Nj4GhQWtq8Q== nguyenhongky1998@gmail.com"
+
+  - name: "user3"
+    shell: "/bin/bash"
+    append:  "yes"
+    password: "password"
+    state: "present"
+    pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC2wbMg1exRfCld3m0K3gEkqAmnzkm6TjMiXi+W9PrTb/oZdsGcEf+aThW6d+gh39lfkNSxt6/xkywel+uaKH58RwBtM4vqwnTuew5zuCmFVnzZ4hm7Rb7/4GXhf3bpAnO0i+qxdlYUzgG+sMT+nxZ4Pkouw1aoYofE4IIlINQIWu1fZ/al47XSwxtqeAflRZ918q0lBdYFD2gBoKP2E5cgJtFV54ljA5x/uGIMqrzSTkE0rM3YU1xZuTXFmOCQJOrKckWCgjgzvyCQ8HHolHuLRVEU1lBC6u+mpDO9XjqNP4YKIEp3LU5yjouRIPS8EQsvH5UUjV3+zAXRGGBdRh7nj6uE9tsdEUOtaOnA0+x+CXOm59IS+XoYgYRX54cGALc9gLLixaNrmohGcQPixyVTU7k58Slb0VzF0B8Ln9VyzwPEmGkgnxi/Bd4kW1vD/vEXs5IRqFLyEZovRXOkiTBBNa996S1BjnFvvC9MNFvNBus2ummquL5Yxh/Tw3y6le5xNFaGay67EwAdcqdCBWYCbXB8jKmMNOsIxr/Gm7XFxZSrjU8VJvfmylsz/MalLmJenAbnHTil1CyBLTZCYqjfJPzVBUNliIhbryhSAarpv7bifx/A8ToKDmUNjpu0Hbnq+v6jZz1mY2UjAmI3XDVpjZ1p45EVnT9Nj4GhQWtq8Q== nguyenhongky1998@gmail.com"

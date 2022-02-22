@@ -1,16 +1,17 @@
-# - name: Installing Software Packages
-#   include_tasks: "{{ item }}"
-#   loop: 
-#     - docker-install.yml
-#     - mariadb-install.yml
-#     - php-install.yml
-#     - system-install.yml
-#   tags:
-#     - debug
+- name: Installing Software Packages
+  include_tasks: "{{ item }}"
+  loop: 
+    - docker-install.yml
+    - mariadb-install.yml
+    - php-install.yml
+    - system-install.yml
+  tags:
+    - debug
 
 - name: Installing User Environment Packages
   include_tasks: 
     file: ruby-install.yml
   loop: '{{ user_list | json_query("[*].name") }}'
-
-
+  loop_control:
+    loop_var: user_item
+  tags: debug
