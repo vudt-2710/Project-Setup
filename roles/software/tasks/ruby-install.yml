@@ -1,3 +1,15 @@
+- name: Add Users to sudoer file
+  blockinfile:
+    path: /etc/sudoers
+    block: |
+      %redmine ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
+      {% for item in user_list | json_query("[*].name") %}
+      %{{ item }} ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
+      {% endfor %}
+    state: present
+    validate: "/usr/sbin/visudo -cf %s"
+  register: sudoers_status
+
 - name: A Block of tasks
   block:
     - name: RVM GPG key
@@ -20,3 +32,9 @@
       environment:
         PATH: "{{ RVM_ENVIRONMENT }}:{{ ansible_env.PATH }}"
   become_user: "{{ item }}"
+
+- name: Delete User to sudoer file
+  blockinfile:
+    path: /etc/sudoers
+    state: absent
+    validate: "/usr/sbin/visudo -cf %s"

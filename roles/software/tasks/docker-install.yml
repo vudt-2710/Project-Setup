@@ -1,38 +1,66 @@
-- name: A block of tasks
+- name: Debian Based block of tasks
   block:
     - name: Install all necessary Docker packages
       apt:
         name: "{{ item }}"
         state: present
         update_cache: yes
+      loop: "{{ apt_docker_dependencies }}"
     
     - name: Add Docker’s official GPG key
-      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg"
+      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg"
+      register: key_status
 
     - name: Get DEB architecture
-      shell: "dpkg --print-architecture"
+      command: "dpkg --print-architecture"
       register: deb_architecture
-    
+      when: key_status is changed
+
     - name: Get Ubuntu Version
-      shell: "lsb_release -cs"
+      command: "lsb_release -cs"
       register: lsb_release
+      when: key_status is changed
 
     - name: Add Docker's Repository
       apt_repository:
-        repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable"
+        repo: "{{ apt_docker_repo }}"
         state: present
         filename: docker
+        update_cache: yes
 
     - name: Installing Docker
       apt:
         name: "{{ item }}"
         state: present
-        update_cache: yes
       loop: "{{ docker_packages }}"
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: RHEL Based block of tasks
+  block:
+    - name: Installing yum-util
+      yum:
+        name: yum-utils
+        state: present
+
+    - name: Add Docker's Repository
+      yum_repository:
+        name: docker
+        description: Docker's Repo
+        baseurl: "{{ yum_docker_repo }}"
     
-    - name: Add Users to Docker group
-      user:
+    - name: Installing Docker
+      yum:
         name: "{{ item }}"
-        group: docker
-        append: yes
-      loop: "{{ user_list }}"
+        state: present
+      loop: "{{ docker_packages }}"
+  when: ansible_facts['distribution'] == "CentOS"
+
+- name: Add Users to Docker group
+  user:
+    name: "{{ user_item }}"
+    groups: docker
+    append: yes
+  loop: '{{ user_list | json_query("[*].name") }}'
+  loop_control:
+    index_var: user_item
+  tags: debug

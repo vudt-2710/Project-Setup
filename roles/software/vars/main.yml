@@ -2,8 +2,12 @@ rvm_keyids:
   - 409B6B1796C275462A1703113804BB82D39DC0E3
   - 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 
-rvm_keylist: "{{ rvm_keyid | join(' ') }}"
+rvm_keylist: "{{ rvm_keyids | join(' ') }}"
 
+ruby_version: "3.0"
+mariadb_version: "10.6"
+php_version: "7.4"
+php_date_time: "Asia/Tokyo"
 
 RUBY_ENVIRONMENT: "/home/{{ item }}/.rvm/rubies/ruby-{{ ruby_version }}/bin"
 RVM_ENVIRONMENT: "/home/{{ item }}/.rvm/bin"
@@ -21,7 +25,10 @@ sys_packages:
   - postgresql 
   - postgresql-contrib
 
-docker_dependencies:
+apt_docker_repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable"
+apt_mariadb_repo: "deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ lsb_release.stdout }} main"
+
+apt_docker_dependencies:
   - ca-certificates
   - curl
   - gnupg
@@ -32,7 +39,6 @@ docker_packages:
   - docker-ce-cli 
   - containerd.io
 
-php_version: "7.4"
 php_packages:
   - "php{{ php_version }}"
   - "php{{ php_version }}-fpm"
@@ -66,11 +72,12 @@ php_options: "--with-pdo-pgsql --with-zlib-dir --with-freetype --enable-mbstring
 url_php_tarball: "https://www.php.net/distributions/php-{{ php_version }}.tar.gz"
 php_tarfile: "{{ url_php_tarball | basename }}"
 php_prefix: "/opt/php-{{ php_version }}"
-php_date_time: "Asia/Tokyo"
 php_configs:
   - { src: "/tmp/{{ php_tarfile }}/etc/php-fpm.d/www.conf.default", dest: "{{ php_prefix }}/etc/php-fpm.d/www.conf" }
   - { src: "/tmp/{{ php_tarfile }}/etc/php-fpm.conf.default", dest: "{{ php_prefix }}/etc/php-fpm.conf" }
   - { src: "/tmp/{{ php_tarfile }}/php.ini-production", dest: "{{ php_prefix }}/lib/php.ini" }
 
 mariadb_key: "https://mariadb.org/mariadb_release_signing_key.asc"
-mariadb_version: "10.0.38"
+yum_docker_repo: "https://download.docker.com/linux/centos/docker-ce.repo"
+yum_mariadb_repo: "http://yum.mariadb.org/{{ mariadb_version }}/centos7-amd64"
+yum_mariadb_key: "https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"
