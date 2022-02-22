@@ -1,22 +1,45 @@
-- name: Add MariaDB key
-  apt_key:
-    url: "{{ mariadb_key }}"
-    state: present
+- name: Debian Based block of tasks
+  block:
+    - name: Add MariaDB key
+      apt_key:
+        url: "{{ mariadb_key }}"
+        state: present
+      register: key_status
 
-- name: Get Ubuntu Version
-  shell: "lsb_release -cs"
-  register: lsb_release
+    - name: Get Ubuntu Version
+      command: "lsb_release -cs"
+      register: lsb_release
+      when: key_status is changed
 
-- name: Add MariaDB Repository
-  apt_repository:
-    repo: "deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ lsb_release.stdout }} main'"
+    - name: Add MariaDB Repository
+      apt_repository:
+        repo: "{{ apt_mariadb_repo }}"
+        update_cache: yes
 
-- name: Update Cache
-  apt:
-    update_cache: yes
+    - name: "Installing MariaDB-{{ mariadb_version }}"
+      apt: 
+        name: mariadb-server
+        state: present
+  when: ansible_facts['distribution'] == "Ubuntu"
 
-- name: "Installing MariaDB-{{ mariadb_version }}"
-  apt: 
-    name: mariadb-server
-    state: present
+- name: RHEL Based block of tasks
+  block:
+    - name: Add MariaDB Repository
+      yum_repository:
+        name: MariaDB
+        baseurl: "{{ yum_mariadb_repo }}"
+        gpgcheck: yes 
+        gpgkey: "{{ yum_mariadb_key }}"
+    
+    - name: Installing MariaDB
+      yum:
+        name: MariaDB-server
+        state: present
+
+    - name: Enable MariaDB Service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+  when: ansible_facts['distribution'] == "CentOS"
 
