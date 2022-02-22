@@ -2,23 +2,17 @@ rvm_keyids:
   - 409B6B1796C275462A1703113804BB82D39DC0E3
   - 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 
-rvm_keylist: "{{ rvm_keyids | join(' ') }}"
-
 ruby_version: "3.0"
 mariadb_version: "10.6"
 php_version: "7.4"
 php_date_time: "Asia/Tokyo"
 
-RUBY_ENVIRONMENT: "/home/{{ item }}/.rvm/rubies/ruby-{{ ruby_version }}/bin"
-RVM_ENVIRONMENT: "/home/{{ item }}/.rvm/bin"
+RUBY_ENVIRONMENT: "/home/{{ user_item }}/.rvm/rubies/ruby-{{ ruby_version }}/bin"
+RVM_ENVIRONMENT: "/home/{{ user_item }}/.rvm/bin"
 
 install_process:
-  - "~/.rvm/scripts/rvm"
   - "rvm install {{ ruby_version }}"
   - "rvm use {{ ruby_version }} --default"
-
-install_process_list: "{{ install_process | join(' && ') }}"
-
 
 sys_packages:
   - nginx

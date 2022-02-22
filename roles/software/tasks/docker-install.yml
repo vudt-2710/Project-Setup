@@ -59,8 +59,9 @@
   user:
     name: "{{ user_item }}"
     groups: docker
+    state: present
     append: yes
   loop: '{{ user_list | json_query("[*].name") }}'
   loop_control:
-    index_var: user_item
+    loop_var: user_item
   tags: debug
