@@ -2,7 +2,6 @@
   blockinfile:
     path: /etc/sudoers
     block: |
-      %redmine ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
       {% for item in user_list | json_query("[*].name") %}
       %{{ item }} ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
       {% endfor %}
