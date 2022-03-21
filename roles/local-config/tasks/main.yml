@@ -9,11 +9,11 @@
 - name: Changing /etc/hosts
   lineinfile:
     path: /etc/hosts
-    regexp: "127.0.0.1 {{ ansible_hostname }}"
+    regexp: "^(.*)127(.*)$"
     line: "127.0.0.1 {{ item.project }}"
     state: "present"
   loop: "{{ server_info }}"
-  
+
 # CentOS
 - name: CentOS Local Config
   block:
