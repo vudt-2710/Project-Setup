@@ -1,0 +1,18 @@
+- name: Debian Based block of tasks
+  block:
+    - name: "Installing Elastic Search v{{ es_version }}"
+      apt:
+        deb: "{{ apt_elastic_deb }}"
+        state: present
+      notify: Start Elastic Search
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: RHEL Based block of tasks
+  block:
+    - name: "Installing Elastic Search v{{ es_version }}"
+      yum:
+        name: "{{ yum_elasticsearch_rpm }}"
+        state: present
+      notify: Start Elastic Search
+  when: ansible_facts['distribution'] == "CentOS"
+

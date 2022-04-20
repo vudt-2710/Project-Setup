@@ -5,6 +5,7 @@ rvm_keyids:
 ruby_version: "3.0"
 mariadb_version: "10.6"
 php_version: "7.4"
+es_version: "7.4.0"
 php_date_time: "Asia/Tokyo"
 
 RUBY_ENVIRONMENT: "/home/{{ user_item }}/.rvm/rubies/ruby-{{ ruby_version }}/bin"
@@ -21,7 +22,7 @@ sys_packages:
 
 apt_docker_repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable"
 apt_mariadb_repo: "deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ lsb_release.stdout }} main"
-
+apt_elastic_deb: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ es_version }}-amd64.deb"
 apt_docker_dependencies:
   - ca-certificates
   - curl
@@ -75,3 +76,4 @@ mariadb_key: "https://mariadb.org/mariadb_release_signing_key.asc"
 yum_docker_repo: "https://download.docker.com/linux/centos/docker-ce.repo"
 yum_mariadb_repo: "http://yum.mariadb.org/{{ mariadb_version }}/centos7-amd64"
 yum_mariadb_key: "https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"
+yum_elasticsearch_rpm: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ es_version }}-x86_64.rpm"
