@@ -5,6 +5,7 @@
     - mariadb-install.yml
     - php-install.yml
     - system-install.yml
+    - elasticsearch-install.yml
   tags:
     - debug
 
