@@ -1,83 +1,83 @@
-- name: Install from PPA
+- name: Debian Based block of tasks
   block:
-    - name: Adding ondrej/php PPA
-      apt_repository:
-        repo: ppa:ondrej/php
-    
-    - name: Update Cache
-      apt:
-        update_cache: yes
-
-    - name: "Installing PHP {{ php_version }} Packages"
-      apt:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ php_packages }}"
+    - name: Install from PPA
+      block:
+        - name: Adding ondrej/php PPA
+          apt_repository:
+            repo: ppa:ondrej/php
+            update_cache: yes
   
-- name: Install from Source
-  block:
-    - name: Installing Build Dependencies
-      apt: 
-        name: "{{ item }}"
-        state: present
-      loop: "{{ build_essential_packages }}"
-    
-    - name: "Downloading PHP-{{ php_version }} from source"
-      unarchive:
-        src: "{{ url_php_tarball }}"
-        dest: "/tmp/{{ php_tarfile }}"
-        validate_certs: no 
-        remote_src: yes
-        extra_opts: [--strip-components=1]
-    
-    - name: Pre-Build PHP
-      command: ./configure --prefix={{ php_prefix }} {{ php_options }} 
-      args:
-        chdir: "/tmp/{{ php_tarfile }}"
+        - name: "Installing PHP {{ php_version }} Packages"
+          apt:
+            name: "{{ item }}"
+            state: present
+          loop: "{{ php_packages }}"
       
-    - name: make Build PHP
-      make:
-        chdir: "/tmp/{{ php_tarfile }}"
+    - name: Install from Source
+      block:
+        - name: Installing Build Dependencies
+          apt: 
+            name: "{{ item }}"
+            state: present
+          loop: "{{ build_essential_packages }}"
+        
+        - name: "Downloading PHP-{{ php_version }} from source"
+          unarchive:
+            src: "{{ url_php_tarball }}"
+            dest: "/tmp/{{ php_tarfile }}"
+            validate_certs: no 
+            remote_src: yes
+            extra_opts: [--strip-components=1]
+        
+        - name: Pre-Build PHP
+          command: ./configure --prefix={{ php_prefix }} {{ php_options }} 
+          args:
+            chdir: "/tmp/{{ php_tarfile }}"
+          
+        - name: make Build PHP
+          make:
+            chdir: "/tmp/{{ php_tarfile }}"
 
-    - name: Make Install
-      make:
-        target: install 
-        chdir: "/tmp/{{ php_tarfile }}"
-    
-    - name: Copy PHP.ini
-      copy:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: root
-        group: root
-        mode: "644"
-        remote_src: yes
-      loop: "{{ php_configs }}"
+        - name: Make Install
+          make:
+            target: install 
+            chdir: "/tmp/{{ php_tarfile }}"
+        
+        - name: Copy PHP.ini
+          copy:
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
+            owner: root
+            group: root
+            mode: "644"
+            remote_src: yes
+          loop: "{{ php_configs }}"
 
-    - name: Copying PHP Template
-      template:
-        src: php-fpm.j2
-        dest: /etc/systemd/system/php-{{ php_version }}-fpm.service
-        owner: root
-        group: root
-        mode: "644"
-    
-    - name: Change PID Location
-      lineinfile:
-        path: /opt/php-{{ php_version }}/etc/php-fpm.conf
-        regexp: "; pid = run/php-fpm.pid"
-        line: "pid = run/php-fpm.pid"
-        state: present  
-      
-    - name: Change Date and Time
-      lineinfile:
-        path: /opt/php-{{ php_version }}/lib/php.ini
-        regexp: ";date.timezone ="
-        line: 'date.timezone = "{{ php_date_time }}"'
-        state: present  
+        - name: Copying PHP Template
+          template:
+            src: php-fpm.j2
+            dest: /etc/systemd/system/php-{{ php_version }}-fpm.service
+            owner: root
+            group: root
+            mode: "644"
+        
+        - name: Change PID Location
+          lineinfile:
+            path: /opt/php-{{ php_version }}/etc/php-fpm.conf
+            regexp: "; pid = run/php-fpm.pid"
+            line: "pid = run/php-fpm.pid"
+            state: present  
+          
+        - name: Change Date and Time
+          lineinfile:
+            path: /opt/php-{{ php_version }}/lib/php.ini
+            regexp: ";date.timezone ="
+            line: 'date.timezone = "{{ php_date_time }}"'
+            state: present  
 
-    - name: Start PHP-FPM Service
-      service:
-        name: php-{{ php_version }}-fpm.service
-        state: started
-        enabled: yes
+        - name: Start PHP-FPM Service
+          service:
+            name: php-{{ php_version }}-fpm.service
+            state: started
+            enabled: yes
+  when: ansible_facts['distribution'] == "Ubuntu"

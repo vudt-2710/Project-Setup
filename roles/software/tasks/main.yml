@@ -1,49 +1,17 @@
-- name: Ubuntu Server
-  become: yes
-  block:  
-    - name: Installing System Packages
-      apt:
-        name: "{{ item }}"
-        state: present
-        update_cache: yes
-      loop: "{{ sys_packages }}"
+- name: Installing Software Packages
+  include_tasks: "{{ item }}"
+  loop: 
+    - docker-install.yml
+    - mariadb-install.yml
+    - php-install.yml
+    - system-install.yml
+  tags:
+    - debug
 
-    # - name: Add Users to sudoer file
-    #   blockinfile:
-    #     path: /etc/sudoers
-    #     block: |
-    #       %redmine ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
-    #       {% for item in sudo_user | json_query("[*].name") %}
-    #       %{{ item }} ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt-get,/usr/bin/apt-key,/usr/bin/apt-get install,/usr/bin/apt update,/usr/bin/apt install -y
-    #       {% endfor %}
-    #     state: present
-    #     validate: "/usr/sbin/visudo -cf %s"
-
-    # - name: Installing User Environment Packages
-    #   include_tasks: 
-    #     file: ruby-install.yml
-    #   loop: '{{ user_list | json_query("[*].name") }}'
-
-    # - name: Installing Docker
-    #   include_tasks:
-    #     file: docker-install.yml
-
-    # - name: Delete User to sudoer file
-    #   blockinfile:
-    #     path: /etc/sudoers
-    #     state: absent
-    #     validate: "/usr/sbin/visudo -cf %s"
-    #   tags: debug
-
-  when: ansible_facts['distribution'] == "Ubuntu"
-
-- name: CentOS Server
-  become: yes
-  block:  
-    - name: Installing System Packages
-      yum:
-        name: "{{ item }}"
-        state: present
-        update_cache: yes
-      loop: "{{ packages }}"
-  when: ansible_facts['distribution'] == "CentOS"
+- name: Installing User Environment Packages
+  include_tasks: 
+    file: ruby-install.yml
+  loop: '{{ user_list | json_query("[*].name") }}'
+  loop_control:
+    loop_var: user_item
+  tags: debug

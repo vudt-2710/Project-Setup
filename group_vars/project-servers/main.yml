@@ -4,18 +4,18 @@ user_list:
     append: "yes"
     password: "password"
     state: "present"
-    pubkey: pubkey
+    pubkey: "ssh-key"
 
   - name: "user2"
     shell: "/bin/bash"
     append: "yes"
     password: "password"
     state: "present"
-    pubkey: pubkey
+    pubkey: "ssh-key"
 
   - name: "user3"
     shell: "/bin/bash"
     append:  "yes"
     password: "password"
     state: "present"
-    pubkey: pubkey
+    pubkey: "ssh-key"

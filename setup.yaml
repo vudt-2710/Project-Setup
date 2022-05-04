@@ -4,7 +4,7 @@
   roles:
     - user-creation
     - local-config
-    - sotfware
+    - software
 
 - hosts: proxy-server
   become: yes
