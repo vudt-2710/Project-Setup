@@ -6,6 +6,7 @@
     - local-config
     - software
 
+
 - hosts: proxy-server
   become: yes
   roles:

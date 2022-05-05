@@ -1,0 +1,7 @@
+- name: ansible shell module
+  shell: 'curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
+- name: install required packages
+  apt:
+    name: nodejs
+    state: present
+  become: yes
