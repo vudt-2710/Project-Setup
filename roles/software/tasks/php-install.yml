@@ -20,14 +20,14 @@
             name: "{{ item }}"
             state: present
           loop: "{{ build_essential_packages }}"
-        
-        - name: "Downloading PHP-{{ php_version }} from source"
-          unarchive:
-            src: "{{ url_php_tarball }}"
-            dest: "/tmp/{{ php_tarfile }}"
-            validate_certs: no 
-            remote_src: yes
-            extra_opts: [--strip-components=1]
+        # link error 500.
+        # - name: "Downloading PHP-{{ php_version }} from source"
+        #   unarchive:
+        #     src: "{{ url_php_tarball }}"
+        #     dest: "/tmp/{{ php_tarfile }}"
+        #     validate_certs: no 
+        #     remote_src: yes
+        #     extra_opts: [--strip-components=1]
         
         - name: Pre-Build PHP
           command: ./configure --prefix={{ php_prefix }} {{ php_options }} 

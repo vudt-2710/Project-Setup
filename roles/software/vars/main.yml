@@ -64,7 +64,7 @@ build_essential_packages:
   - build-essential
 
 php_options: "--with-pdo-pgsql --with-zlib-dir --with-freetype --enable-mbstring --enable-soap --enable-calendar --with-curl --with-zlib --enable-gd --with-pgsql --disable-rpath --enable-inline-optimization --with-bz2 --with-zlib --enable-sockets --enable-sysvsem --enable-sysvshm --enable-pcntl --enable-mbregex --enable-exif --enable-bcmath --with-mhash --with-zip --with-pdo-mysql --with-mysqli --with-mysql-sock=/var/run/mysqld/mysqld.sock --with-jpeg --with-openssl --with-fpm-user=www-data --with-fpm-group=www-data --with-libdir=/lib/x86_64-linux-gnu --enable-ftp --with-imap --with-imap-ssl --with-kerberos --with-gettext --with-xmlrpc --with-xsl --enable-opcache --enable-intl --with-pear --enable-fpm"
-url_php_tarball: "https://www.php.net/distributions/php-{{ php_version }}.tar.gz"
+url_php_tarball: "https://www.php.net/distributions/php-{{ php_version }}.tar.gz" #link error 500, so be can't file download file.
 php_tarfile: "{{ url_php_tarball | basename }}"
 php_prefix: "/opt/php-{{ php_version }}"
 php_configs:

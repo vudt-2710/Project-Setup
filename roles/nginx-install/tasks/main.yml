@@ -1,0 +1,5 @@
+- name: install required packages
+  apt: 
+    name: nginx
+    state: present
+  become: yes

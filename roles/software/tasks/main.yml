@@ -1,12 +1,13 @@
 - name: Installing Software Packages
   include_tasks: "{{ item }}"
   loop: 
-    - docker-install.yml
-    - mariadb-install.yml
-    - php-install.yml
-    - system-install.yml
-    - elasticsearch-install.yml
-    - install-nodejs.yml
+     - docker-install.yml
+     - mariadb-install.yml
+#     - php-install.yml
+     - system-install.yml
+     - elasticsearch-install.yml
+     - install-nodejs.yml
+     - install-nginx.yml
   tags:
     - debug
 
