@@ -1,0 +1,6 @@
+- name: Generate Basic Authen
+  command:  "htpasswd -c -b .htpasswd-{{ item.servername }} {{ item.servername }}.{{ item.domainname }} {{ item.authen_password }}"
+  args:
+    chdir: /etc/nginx/authen/
+  when: item.authen_password != None
+  loop: "{{ proxy_info }}"

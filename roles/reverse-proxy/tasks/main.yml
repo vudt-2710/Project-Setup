@@ -8,6 +8,7 @@
         group: root
         mode: "644"
       loop: "{{ proxy_info }}"
+      notify: Reload Reverse-Proxy
       
 
     # - name: Generate Basic Authen
@@ -20,13 +21,13 @@
     #     mode: '640'
     #   loop: "{{ server.info }}"
     
-    - name: Generate Basic Authen
-      command:  "htpasswd -c -b .htpasswd-{{ item.servername }} {{ item.servername }}.{{ item.domainname }} {{ item.authen_password }}"
-      args:
-        chdir: /etc/nginx/authen/
-      loop: "{{ proxy_info }}"
-      notify: Reload Reverse-Proxy
-      tags: authen
+    # - name: Generate Basic Authen
+    #   command:  "htpasswd -c -b .htpasswd-{{ item.servername }} {{ item.servername }}.{{ item.domainname }} {{ item.authen_password }}"
+    #   args:
+    #     chdir: /etc/nginx/authen/
+    #   loop: "{{ proxy_info }}"
+    #   notify: Reload Reverse-Proxy
+    #   tags: authen
       
 
 

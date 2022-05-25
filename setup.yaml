@@ -2,17 +2,18 @@
 - hosts: project-servers
   become: yes
   roles:
-#      - nginx-install
-#      - nodejs-install
-#     - user-creation
-#     - local-config
-      - software
+    - nginx-install
+    - nodejs-install
+    - user-creation
+    - local-config
+    - software
 
 
-# - hosts: proxy-server
-#   become: yes
-#   roles:
-#     - reverse-proxy
+- hosts: proxy-server
+  become: yes
+  roles:
+    - htpasswd
+    - reverse-proxy
 
 
       
