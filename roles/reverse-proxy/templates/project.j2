@@ -10,10 +10,11 @@ server {
 
 	error_page 404 /404;
 
+	{% if item.authen_password != None %}
 	auth_basic "{{ item.servername }}.{{ item.domainname }}";
 	auth_basic_user_file /etc/nginx/authen/.htpasswd-{{ item.servername }};
+	{% endif %}
 
-	# IP Custommer
 	# allow 0.0.0.0/32;
 	# IP Da Nang
 	allow 14.176.232.181/32;

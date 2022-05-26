@@ -1,3 +1,4 @@
+# authen_password: should be null or left empty if no basic authen is provided
 proxy_info: 
   - servername: "domain1"
     domainname: "sun-asterisk.vn"
