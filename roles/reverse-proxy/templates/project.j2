@@ -38,7 +38,9 @@ server {
 	allow 172.17.0.0/22;
 	allow 10.10.1.0/24;
 
+	{% if item.public != false %}
 	deny all;
+	{% endif %}
 
 	access_log /var/log/nginx/{{ item.servername }}.{{ item.domainname }}.access.log;
 	error_log /var/log/nginx/{{ item.servername }}.{{ item.domainname }}.error.log;
